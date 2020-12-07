@@ -74,7 +74,7 @@ class ViewController: UIViewController {
 }
 
 class FirstViewController: UIViewController {
-    let label = createLabel(str: "Login Page")
+    let label = createLabel(str: "Home Page")
     
     override func viewDidLoad() {
         super.viewDidLoad()
