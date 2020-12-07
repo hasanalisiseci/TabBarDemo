@@ -10,118 +10,121 @@ import UIKit
 class ViewController: UIViewController {
     
     private let button: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 52))
-        button.layer.cornerRadius = 10
-        button.layer.shadowOpacity = 0.3
-        button.layer.shadowOffset = CGSize(width: 0, height: 5)
-        button.setTitle("Log In", for: .normal)
-        button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)
-        return button
+            //UIButton tipinde bir buton nesnesi oluşturuyor ve boyutlarını belirliyoruz.
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 60))
+            //Butonumuzun daha şık görünmesi için cornerRadius değeri atıyoruz.
+            button.layer.cornerRadius = 10
+            //Butonumuz için gölge opaklığı ve butona göre konumunu belirliyoruz.
+            button.layer.shadowOpacity = 0.5
+            button.layer.shadowOffset = CGSize(width: 0, height: 5)
+            //Butonumuzun arkaplan rengini, başlığını ve başlık yazısının rengini belirliyoruz.
+            button.backgroundColor = .white
+            button.setTitle("Log In", for: .normal)
+            button.setTitleColor(.black, for: .normal)
+            //Ardından buton nesnemizi döndürüyoruz.
+            return button
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Ekranımızın arkaplan rengini atıyoruz.
         view.backgroundColor = .systemBlue
+        //Ekranımıza butonumuzu ekliyoruz.
         view.addSubview(button)
+        //Butonumuzu sayfaya göre ortalıyoruz.
+        button.center = view.center
+        //Buton nesnemiz ile fonksiyonumuzu ilişkilendiriyoruz
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        button.center = view.center
-    }
-    
+
     @objc func didTapButton() {
         //Create and present tab bar controller
         let tabBarVC = UITabBarController()
         let vc1 = UINavigationController(rootViewController: FirstViewController())
         let vc2 = UINavigationController(rootViewController: SecondViewController())
         let vc3 = UINavigationController(rootViewController: ThirdViewController())
-        let vc4 = UINavigationController(rootViewController: FourthViewController())
-        let vc5 = UINavigationController(rootViewController: FifthViewController())
+        
         
         vc1.title = "Home"
-        vc2.title = "Contact"
+        vc2.title = "Settings"
         vc3.title = "About"
-        vc4.title = "Settings"
-        vc5.title = "Help"
+     
 
-        tabBarVC.setViewControllers([vc1,vc2,vc3,vc4,vc5], animated: false)
+        tabBarVC.setViewControllers([vc1,vc2,vc3], animated: false)
         
+        //tab bar itemlerimizi bir diziye atıyoruz.
+        let items = tabBarVC.tabBar.items
         
-        guard let items = tabBarVC.tabBar.items else {
-            return
+        //Kullanacağımız ikon isimlerini de bir listeye atıyoruz.
+        let images = ["house","gear","person.circle"]
+        
+        // Ardından for döngüsü yardımıyla bu itemlere ikonlarını atarken, itemlerin badgeValue sayılarını da for döngüsündeki integer değeri kullanarak örnek olması adına ekliyoruz.
+        for item in 0..<items!.count {
+            //Sekme ikonlarını atıyoruz.
+            items![item].image = UIImage(systemName: images[item])
+            //Bildirim sayısı için badgeValue değeri atıyoruz.
+            items![item].badgeValue = String(item+1)
         }
         
-        let images = ["house","character.book.closed","person.circle","gear","paperclip"]
-        
-        for item in 0..<items.count {
-            //Bildirim sayısı için badgeValue
-            items[item].badgeValue = String(item+1)
-            items[item].image = UIImage(systemName: images[item])
-        }
-        
+        //Tab Bar Controller'ın nasıl görüntüleneceğini belirliyoruz.
         tabBarVC.modalPresentationStyle = .fullScreen
-        
+        //Ardından tab bar controller'ımızı
         present(tabBarVC,animated: true)
     }
 }
 
 class FirstViewController: UIViewController {
-    
-    private let label : UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
-        label.text = "Selam"
-        label.font = UIFont(name: label.font.familyName, size: 70)
-        label.textAlignment = .center
-        label.textColor = .white
-        return label
-    }()
+    let label = createLabel(str: "Login Page")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .red
         title = "Home"
         view.addSubview(label)
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         label.center = view.center
     }
 }
 
 class SecondViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .green
-        title = "Contact"
-
-    }
-}
-
-class ThirdViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .orange
-        title = "About"
-
-    }
-}
-
-class FourthViewController: UIViewController {
+    let label = createLabel(str: "Settings Page")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .purple
         title = "Settings"
-
+        view.addSubview(label)
+        label.center = view.center
     }
 }
 
-class FifthViewController: UIViewController {
+class ThirdViewController: UIViewController {
+    
+    let label = createLabel(str: "About Page")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .darkGray
-        title = "Help"
+        view.backgroundColor = .orange
+        title = "About"
+        view.addSubview(label)
+        label.center = view.center
     }
 }
+
+
+func createLabel(str : String) -> UILabel {
+    //Label'ımızı oluşturup konum vermeden boyutlarını atıyoruz.
+    let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 100))
+    //Parametre olarak gelen string değeri label text olarak atıyoruz.
+    label.text = "\(str)"
+    //Fontumuzu ve font size'ı atıyoruz.
+    label.font = UIFont(name: label.font.familyName, size: 50)
+    //Yazımızı hizalıyoruz.
+    label.textAlignment = .center
+    //Text rengi olarak beyaz rengini belirledik.
+    label.textColor = .white
+    //Ve oluşturduğumuz label nesnesini geri döndürüyoruz.
+    return label
+}
+
+
+
